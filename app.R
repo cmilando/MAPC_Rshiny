@@ -8,7 +8,7 @@ df <- read_xlsx(DATA_PATH)
 
 # Map for metrics and bounds
 metric_map <- list(
-  "Rate (ED visits per population)" = list(
+  "Rate (ED visits per 100,000 population)" = list(
     est = "mean_annual_attr_ED_rate_est",
     lb  = "mean_annual_attr_ED_rate_lb",
     ub  = "mean_annual_attr_ED_rate_ub"
@@ -18,12 +18,6 @@ metric_map <- list(
     lb  = "mean_annual_attr_ED_visit_lb",
     ub  = "mean_annual_attr_ED_visit_ub"
   )
-)
-
-# exposure choices
-exposure_map <- list(
-  "All" = list(subset = "all"),
-  "First heatwave" = list(subset = "First")
 )
 
 # Basic checks
@@ -100,7 +94,8 @@ server <- function(input, output, session) {
     m <- metric_map[[input$metric]]
     d <- filtered()
     out <- d[, c("region", "POP2020", m$est, m$lb, m$ub)]
-    names(out) <- c("Town", "Population (2020)", "Estimate", "Lower bound", "Upper bound")
+    names(out) <- c("Town", "Population (2020)", "Estimate",
+                    "Lower bound", "Upper bound")
     head(out[order(out$Estimate, decreasing = TRUE), ], 100)
   })
 }
