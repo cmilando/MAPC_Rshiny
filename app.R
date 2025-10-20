@@ -20,6 +20,12 @@ metric_map <- list(
   )
 )
 
+# exposure choices
+exposure_map <- list(
+  "All" = list(subset = "all"),
+  "First heatwave" = list(subset = "First")
+)
+
 # Basic checks
 needed <- unique(unlist(lapply(metric_map, unname)))
 stopifnot(all(c("region", "POP2020") %in% names(df)))
@@ -27,21 +33,34 @@ df <- df[complete.cases(df[, c("region", "POP2020", needed)]), ]
 
 # ---- UI ----
 ui <- fluidPage(
-  titlePanel("Heat-attributable ED visits in Massachusetts towns"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("metric", "Metric", choices = names(metric_map)),
-      sliderInput("pop_range", "Town population range (2020)",
-                  min = min(df$POP2020), max = max(df$POP2020),
-                  value = range(df$POP2020), step = 1, sep = ","),
-      numericInput("top_n", "Show top N towns", value = 15, min = 5, max = 100)
+  tabsetPanel(
+    # BY TOWN
+    tabPanel(title = "Town",
+             titlePanel("Heat-attributable ED visits by Town"),
+        sidebarLayout(
+          sidebarPanel(
+            selectInput("metric", "Metric", choices = names(metric_map)),
+            sliderInput("pop_range", "Town population range (2020)",
+                        min = min(df$POP2020), max = max(df$POP2020),
+                        value = range(df$POP2020), step = 1, sep = ","),
+            numericInput("top_n", "Show top N towns", 
+                         value = 15, min = 5, max = 100)
+          ),
+          mainPanel(
+            plotOutput("barplot", height = "450px"),
+            tags$hr(),
+            h4("Filtered data"),
+            tableOutput("table")
+          )
+        )
     ),
-    mainPanel(
-      plotOutput("barplot", height = "450px"),
-      tags$hr(),
-      h4("Filtered data"),
-      tableOutput("table")
-    )
+    # BY DEMOGRAPHICS
+    # Age-Group, 
+    tabPanel(title = "Demographics",
+             titlePanel("Heat-attributable ED visits by Demographic variables")),
+    # BY GEOSPATIAL 
+    tabPanel(title = "GeoSpatial",
+             titlePanel("Heat-attributable ED visits by Geospatial variables")),
   )
 )
 
