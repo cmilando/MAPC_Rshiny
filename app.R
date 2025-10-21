@@ -30,7 +30,7 @@ ui <- fluidPage(
   tabsetPanel(
     # BY TOWN
     tabPanel(title = "Town",
-             titlePanel("Heat-attributable ED visits by Town"),
+             titlePanel("Heat-attributable ED visits by MA Town"),
         sidebarLayout(
           sidebarPanel(
             selectInput("metric", "Metric", choices = names(metric_map)),
