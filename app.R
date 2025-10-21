@@ -4,7 +4,7 @@ library(readxl)
 
 # ---- Load data ----
 DATA_PATH <- "by_city.xlsx"
-df <- read_xlsx(DATA_PATH)
+by_city_df <- read_xlsx(DATA_PATH)
 
 # Map for metrics and bounds
 metric_map <- list(
@@ -22,8 +22,8 @@ metric_map <- list(
 
 # Basic checks
 needed <- unique(unlist(lapply(metric_map, unname)))
-stopifnot(all(c("region", "POP2020") %in% names(df)))
-df <- df[complete.cases(df[, c("region", "POP2020", needed)]), ]
+stopifnot(all(c("region", "POP2020") %in% names(by_city_df)))
+by_city_df <- by_city_df[complete.cases(by_city_df[, c("region", "POP2020", needed)]), ]
 
 # ---- UI ----
 ui <- fluidPage(
@@ -35,8 +35,8 @@ ui <- fluidPage(
           sidebarPanel(
             selectInput("metric", "Metric", choices = names(metric_map)),
             sliderInput("pop_range", "Town population range (2020)",
-                        min = min(df$POP2020), max = max(df$POP2020),
-                        value = range(df$POP2020), step = 1, sep = ","),
+                        min = min(by_city_df$POP2020), max = max(by_city_df$POP2020),
+                        value = range(by_city_df$POP2020), step = 1, sep = ","),
             numericInput("top_n", "Show top N towns", 
                          value = 15, min = 5, max = 100)
           ),
@@ -63,7 +63,7 @@ server <- function(input, output, session) {
   
   filtered <- reactive({
     rng <- input$pop_range
-    df[df$POP2020 >= rng[1] & df$POP2020 <= rng[2], ]
+    by_city_df[by_city_df$POP2020 >= rng[1] & by_city_df$POP2020 <= rng[2], ]
   })
   
   output$barplot <- renderPlot({
