@@ -41,9 +41,9 @@ ui <- fluidPage(
                          value = 15, min = 5, max = 100)
           ),
           mainPanel(
-            plotOutput("barplot", height = "450px"),
+            plotOutput("by_city_barplot", height = "450px"),
             tags$hr(),
-            h4("Filtered data"),
+            h4("by_city_filtered data"),
             tableOutput("table")
           )
         )
@@ -61,14 +61,14 @@ ui <- fluidPage(
 # ---- SERVER ----
 server <- function(input, output, session) {
   
-  filtered <- reactive({
+  by_city_filtered <- reactive({
     rng <- input$pop_range
     by_city_df[by_city_df$POP2020 >= rng[1] & by_city_df$POP2020 <= rng[2], ]
   })
   
-  output$barplot <- renderPlot({
+  output$by_city_barplot <- renderPlot({
     m <- metric_map[[input$metric]]
-    d <- filtered()[order(filtered()[[m$est]], decreasing = TRUE), ]
+    d <- by_city_filtered()[order(by_city_filtered()[[m$est]], decreasing = TRUE), ]
     d <- head(d, min(nrow(d), input$top_n))
     
     vals <- d[[m$est]]
@@ -92,7 +92,7 @@ server <- function(input, output, session) {
   
   output$table <- renderTable({
     m <- metric_map[[input$metric]]
-    d <- filtered()
+    d <- by_city_filtered()
     out <- d[, c("region", "POP2020", m$est, m$lb, m$ub)]
     names(out) <- c("Town", "Population (2020)", "Estimate",
                     "Lower bound", "Upper bound")
