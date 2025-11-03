@@ -27,7 +27,7 @@ demographic_variable_map <- list(
     levels = c('0-17', '18-39', '40-64', '65+')
   ),
   "Gender" = list(
-    levels = c('F', 'M')
+    levels = c('Female', 'Male')
   )
 )
 
@@ -158,7 +158,12 @@ server <- function(input, output, session) {
   })
   
   by_demo_filtered <- reactive({
-    by_demo_df[by_demo_df$level == input$demo_level, ]
+    print('here')
+    print(input$demo_level)
+    print('--')
+    if(!is.null(input$demo_level)) {
+      by_demo_df[by_demo_df$level == input$demo_level, ]
+    }
   })
   
   output$by_demo_barplot <- renderPlot({
