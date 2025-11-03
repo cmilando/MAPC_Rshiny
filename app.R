@@ -110,7 +110,7 @@ server <- function(input, output, session) {
     xarea <- d$region
     
     plot_df <- data.frame(vals, lb, ub, xarea)
-    print(head(plot_df))
+    # print(head(plot_df))
     
     plot_df %>%
       ggplot(aes(x = reorder(xarea, -vals), y = vals)) +
@@ -172,7 +172,7 @@ server <- function(input, output, session) {
     names(vals) <- paste0(d$AREA, "_", d$level)
     
     plot_df <- data.frame(vals, lb, ub, xarea, xlevel)
-    print(head(plot_df))
+    # print(head(plot_df))
     
     plot_df %>%
       ggplot(aes(x = reorder(xarea, -vals), y = vals)) +
