@@ -128,7 +128,8 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 10),
         plot.title = element_text(hjust = 0.5),
         axis.ticks.x = element_blank(),
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.margin = margin(t=5,r=150,b =5,l=5)
       )
   })
   
@@ -190,7 +191,8 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 10),
         plot.title = element_text(hjust = 0.5),
         axis.ticks.x = element_blank(),
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        plot.margin = margin(t=5,r=150,b =5,l=5)
       )
   })
   
