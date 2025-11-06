@@ -3312,6 +3312,29 @@
         "Built": "R 4.5.1; ; 2025-08-04 12:44:04 UTC; unix"
       }
     },
+    "shinythemes": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "shinythemes",
+        "Title": "Themes for Shiny",
+        "Version": "1.2.0",
+        "Authors@R": "c(\n    person(\"Winston\", \"Chang\", role = c(\"aut\", \"cre\"), email = \"winston@rstudio.com\"),\n    person(family = \"RStudio\", role = \"cph\"),\n    person(\"Thomas\", \"Park\", role = c(\"ctb\", \"cph\"), comment = \"Bootswatch themes\"),\n    person(\"Lukasz\", \"Dziedzic\", role = c(\"ctb\", \"cph\"), comment = \"Lato font\"),\n    person(\"Nathan\", \"Willis\", role = c(\"ctb\", \"cph\"), comment = \"News Cycle font\"),\n    person(family = \"Google Corporation\", role = c(\"ctb\", \"cph\"), comment = \"Open Sans and Roboto fonts\"),\n    person(\"Matt\", \"McInerney\", role = c(\"ctb\", \"cph\"), comment = \"Raleway font\"),\n    person(family = \"Adobe Systems Incorporated\", role = c(\"ctb\", \"cph\"), comment = \"Source Sans Pro font\"),\n    person(family = \"Canonical Ltd\", role = c(\"ctb\", \"cph\"), comment = \"Ubuntu font\")\n    )",
+        "Description": "Themes for use with Shiny. Includes several Bootstrap themes\n    from <https://bootswatch.com/>, which are packaged for use with Shiny\n    applications.",
+        "Depends": "R (>= 3.0.0)",
+        "Imports": "shiny (>= 0.11)",
+        "URL": "https://rstudio.github.io/shinythemes/",
+        "License": "GPL-3 | file LICENSE",
+        "RoxygenNote": "7.1.1",
+        "NeedsCompilation": "no",
+        "Packaged": "2021-01-25 21:27:09 UTC; winston",
+        "Author": "Winston Chang [aut, cre],\n  RStudio [cph],\n  Thomas Park [ctb, cph] (Bootswatch themes),\n  Lukasz Dziedzic [ctb, cph] (Lato font),\n  Nathan Willis [ctb, cph] (News Cycle font),\n  Google Corporation [ctb, cph] (Open Sans and Roboto fonts),\n  Matt McInerney [ctb, cph] (Raleway font),\n  Adobe Systems Incorporated [ctb, cph] (Source Sans Pro font),\n  Canonical Ltd [ctb, cph] (Ubuntu font)",
+        "Maintainer": "Winston Chang <winston@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2021-01-25 22:00:02 UTC",
+        "Built": "R 4.5.1; ; 2025-08-04 12:44:17 UTC; unix"
+      }
+    },
     "sourcetools": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -3999,16 +4022,16 @@
   },
   "files": {
     "app.R": {
-      "checksum": "2859ae52a305763b4bf1336558de138a"
+      "checksum": "0674fe0bd509f3786e45e6907bcc953d"
     },
     "by_city.xlsx": {
       "checksum": "696d8061ab57412b1340bf65d1dca625"
     },
     "county_by_demographic.xlsx": {
-      "checksum": "a742c2366f040706283c48efc5771616"
+      "checksum": "d9a7e4566616373d84376b3d5ab41b24"
     },
     "Readme.md": {
-      "checksum": "42a88792be9a60b99418c8520cc6cbf1"
+      "checksum": "e7bff074b6affcefce177ab1e6ad4a26"
     }
   },
   "users": null
