@@ -24,7 +24,7 @@ metric_map <- list(
 
 demographic_variable_map <- list(
   "Age-group" = list(
-    levels = c('0-17', '18-39', '40-64', '65+')
+    levels = c( '18-39', '40-64', '65+')
   ),
   "Gender" = list(
     levels = c('Female', 'Male')
@@ -39,6 +39,12 @@ by_city_df <- by_city_df[complete.cases(by_city_df[, c("region", "POP2020", need
 
 # ---- UI ----
 ui <- fluidPage(
+  ## Notes
+  tabPanel(title = "Notes",
+           titlePanel("Heat-attributable ED visits in MA"),
+
+           ),
+  
   tabsetPanel(
     # BY TOWN
     tabPanel(title = "Town",
