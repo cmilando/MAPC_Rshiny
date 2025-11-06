@@ -44,7 +44,7 @@ ui <- fluidPage(
   theme = shinytheme("flatly"),
   
   # max width
-  style = "max-width: 900px;",
+  style = "max-width: 1100px;",
   
   tabsetPanel(
     ## Notes

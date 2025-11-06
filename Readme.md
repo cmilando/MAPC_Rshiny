@@ -7,4 +7,4 @@ how to make manifest?
 
 install.packages('rsconnect')
 library(rsconnect)
-?sconnect::writeManifest
+rsconnect::writeManifest
