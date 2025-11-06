@@ -39,13 +39,28 @@ by_city_df <- by_city_df[complete.cases(by_city_df[, c("region", "POP2020", need
 
 # ---- UI ----
 ui <- fluidPage(
-  ## Notes
-  tabPanel(title = "Notes",
-           titlePanel("Heat-attributable ED visits in MA"),
 
-           ),
   
   tabsetPanel(
+    ## Notes
+    tabPanel(title = "Notes",
+             titlePanel("Heat-attributable ED visits in MA"),
+             helpText(HTML("
+             <p>
+Chad Milando, PhD (cmilando@bu.edu), Gregory Wellenius, ScD (wellenius@bu.edu)
+The Center for Climate and Health, Boston University School of Public Health
+</p>
+<br>
+             <p>Heat is a recognized public health hazard. More people die of heat than of any other weather-related disaster. We used Massachusetts data to evaluate the health impacts of heat in the Commonwealth. </p>
+              <ul>
+                <li><b>Time period:</b> Summers (May – Sept) of 2010 through 2023</li>
+                <li><b>Population:</b> Massachusetts (MA) residents of all ages</li>
+                <li><b>Health outcome:</b> All-cause Emergency Department (ED) visits in MA hospitals</li>
+                <li><b>Exposure:</b> Daily maximum temperature for each MA Zipcode</li>
+                Health impacts are calculated for summertime days where the daily maximum temperature > 75F.
+              </ul>
+              "))
+    ),
     # BY TOWN
     tabPanel(title = "Town",
              titlePanel("Heat-attributable ED visits by MA Town"),
