@@ -3,6 +3,7 @@ library(shiny)
 library(readxl)
 library(tidyverse)
 library(ggpubr)
+library(shinythemes)
 
 # ---- Load data ----
 by_city_df <- read_xlsx("by_city.xlsx")
@@ -39,7 +40,11 @@ by_city_df <- by_city_df[complete.cases(by_city_df[, c("region", "POP2020", need
 
 # ---- UI ----
 ui <- fluidPage(
-
+  # theme
+  theme = shinytheme("flatly"),
+  
+  # max width
+  style = "max-width: 900px;",
   
   tabsetPanel(
     ## Notes
@@ -150,8 +155,8 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 10),
         plot.title = element_text(hjust = 0.5),
         axis.ticks.x = element_blank(),
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        plot.margin = margin(t=5,r=150,b =5,l=5)
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+        # plot.margin = margin(t=5,r=150,b =5,l=5)
       )
   })
   
@@ -218,8 +223,8 @@ server <- function(input, output, session) {
         axis.text.y = element_text(size = 10),
         plot.title = element_text(hjust = 0.5),
         axis.ticks.x = element_blank(),
-        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
-        plot.margin = margin(t=5,r=150,b =5,l=5)
+        axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)
+        # plot.margin = margin(t=5,r=150,b =5,l=5)
       )
   })
   
