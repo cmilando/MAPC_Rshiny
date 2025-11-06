@@ -72,11 +72,12 @@ ui <- fluidPage(
              
              sidebarLayout(
                sidebarPanel(
+                 selectInput("demo_metric", "Metric", 
+                             choices = names(metric_map)),
                  selectInput("demo_variable", "Variable", 
                              choices = names(demographic_variable_map)),
-                 uiOutput("demo_level_ui"),
-                 selectInput("demo_metric", "Metric", 
-                             choices = names(metric_map))
+                 uiOutput("demo_level_ui")
+
                ),
                mainPanel(
                  plotOutput("by_demo_barplot", height = "450px"),
@@ -125,8 +126,8 @@ server <- function(input, output, session) {
       geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2) +
       labs(
         x = NULL,
-        y = input$demo_metric,
-        title = paste("Top", nrow(d), "towns by", input$demo_metric)
+        y = input$city_metric ,
+        title = paste("Top", nrow(d), "towns by", input$city_metric)
       ) +
       theme_classic2(base_size = 12) +
       theme(
