@@ -7,7 +7,7 @@ library(shinythemes)
 
 # ---- Load data ----
 by_city_df <- read_xlsx("by_city.xlsx")
-by_demo_df <- read_xlsx("county_by_demographic.xlsx")
+by_demo_df <- read_xlsx("county_by_AGE.xlsx")
 
 # Map for metrics and bounds
 metric_map <- list(
@@ -24,11 +24,13 @@ metric_map <- list(
 )
 
 demographic_variable_map <- list(
-  "Age-group" = list(
-    levels = c( '18-39', '40-64', '65+')
-  ),
-  "Gender" = list(
-    levels = c('Female', 'Male')
+  "County" = list(
+    levels = c(
+      "HAMPDEN" ,   "BRISTOL" ,   "PLYMOUTH" ,  "FRANKLIN",   "NORFOLK"  ,
+      "SUFFOLK",    "ESSEX"  ,    "MIDDLESEX" ,
+      "WORCESTER" , "BERKSHIRE" , "HAMPSHIRE" , "DUKES"    ,  "BARNSTABLE",
+      "NANTUCKET" 
+    )
   )
 )
 
@@ -248,7 +250,7 @@ server <- function(input, output, session) {
     print(input$demo_level)
     print('--')
     if(!is.null(input$demo_level)) {
-      by_demo_df[by_demo_df$level == input$demo_level, ]
+      by_demo_df[by_demo_df$AREA == input$demo_level, ]
     }
   })
   
@@ -264,10 +266,15 @@ server <- function(input, output, session) {
     names(vals) <- paste0(d$AREA, "_", d$level)
     
     plot_df <- data.frame(vals, lb, ub, xarea, xlevel)
-    # print(head(plot_df))
+    #print(head(plot_df))
+  
+    plot_df$xlevel_fct <- factor(plot_df$xlevel,
+                                 levels = c('0-4', '5-17', '18-39',
+                                            '40-64', '65-79','80+'),
+                                 ordered = T)
     
     plot_df %>%
-      ggplot(aes(x = reorder(xarea, -vals), y = vals)) +
+      ggplot(aes(x = xlevel_fct, y = vals)) +
       geom_hline(yintercept = 0) +
       geom_col(fill = "lightblue", width = 0.75, color = 'black', alpha = 0.75) +
       geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2) +
