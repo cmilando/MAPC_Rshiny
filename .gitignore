@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 data/*
+map_data/*
+img/*
