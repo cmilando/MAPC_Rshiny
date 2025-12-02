@@ -6,8 +6,9 @@ library(ggpubr)
 library(shinythemes)
 
 # ---- Load data ----
+source("txt.R")
 by_city_df <- read_xlsx("by_city.xlsx")
-by_demo_df <- read_xlsx("county_by_AGE.xlsx")
+by_age_df <- read_xlsx("county_by_AGE.xlsx")
 
 # Map for metrics and bounds
 metric_map <- list(
@@ -23,7 +24,7 @@ metric_map <- list(
   )
 )
 
-demographic_variable_map <- list(
+county_map <- list(
   "County" = list(
     levels = c(
       "HAMPDEN" ,   "BRISTOL" ,   "PLYMOUTH" ,  "FRANKLIN",   "NORFOLK"  ,
@@ -52,100 +53,41 @@ ui <- fluidPage(
     ## Notes
     tabPanel(title = "Notes",
              titlePanel("Heat-attributable ED visits in MA"),
-             helpText(HTML("
-                     <p>
-        Chad Milando, PhD (cmilando@bu.edu), Gregory Wellenius, ScD (wellenius@bu.edu)
-        The Center for Climate and Health, Boston University School of Public Health
-        </p>
-        <br>")),
+             helpText(HTML(authors)),
              h2("Overview"),       
-             HTML("
-                     <p>Heat is a recognized public health hazard. More people die of heat than of any other weather-related disaster. We used Massachusetts data to evaluate the health impacts of heat in the Commonwealth. </p>
-                      <ul>
-                        <li><b>Time period:</b> Summers (May – Sept) of 2010 through 2023</li>
-                        <li><b>Population:</b> Massachusetts (MA) residents of all ages</li>
-                        <li><b>Health outcome:</b> All-cause Emergency Department (ED) visits in MA hospitals</li>
-                        <li><b>Exposure:</b> Daily maximum temperature for each MA Zipcode</li>
-                        Health impacts are calculated for summertime days where the daily maximum temperature > 75F.
-                      </ul>
-                      "),
-             
-             
+             HTML(html1),
              h2("Assessment of Association"),       
-      HTML("
-      <p>To estimate the association between high ambient temperature and emergency department visits,
-      we used a <b>time-stratified case-crossover study design</b>, specifically a
-      <b>single-stage conditional quasi-Poisson model</b> with strata for ZCTA, year, month, and day of week.</p>
-
-      <p>A single-stage model pools statistical coefficients across all investigated strata, and
-      a quasi-Poisson model adjusts the variance of these coefficients to account for
-      <b>over-dispersion</b> in the observed outcome.
-      A conditional Poisson model has the added benefit of efficiently calculating desired
-      model coefficients without needing to estimate values for strata-specific intercepts.</p>
-
-      <p>We used a <b>distributed lag non-linear modeling (DLNM)</b> framework to capture
-      the non-linear and lagged impact of exposure on the outcome.
-      This models the exposure (temperature or heat index in each ZCTA) as a
-      <i>crossbasis</i> matrix with separate components for the exposure magnitude and the lag:</p>
-
-      <ul>
-        <li>For the exposure magnitude, we used a natural spline with knots at the 50th and 90th percentile of the exposure variable.</li>
-        <li>For the lag, we used a natural spline with two evenly spaced log-knots between 0 and a maximum lag of 8 days.</li>
-      </ul>
-
-      <p>At the strata level, the model has the following format:</p>
-
-      <pre style='background-color: #ffffff; border: 1px solid #ccc; padding: 8px; border-radius: 6px;'>
-        log(yₛ,ᵢ) = αₛ + βwₛ,ᵢ + holiday
-      </pre>
-
-      <p>Here, the daily count of emergency department visits <i>yₛ,ᵢ</i> is a function of a strata-specific intercept
-      <i>αₛ</i> (calculated in post-processing due to the conditional Poisson formulation),
-      daily crossbasis weights <i>wₛ,ᵢ</i>, and an indicator for federal holiday.
-      We removed strata without recorded emergency department visits.</p>
-      "),
-      h2("Estimation of Attributable Number"),
-      HTML("
-      <p>Following the model fit, we calculated the number of emergency department visits
-      <b>attributable to high ambient summertime temperature</b> each year.</p>
-
-      <p>The first step is to define the <b>reference temperature</b>, which provides the baseline against which
-      the impacts of higher temperature are compared.
-      We chose a reference temperature of <b>75 °F</b>, the average daily summertime maximum temperature.</p>
-
-      <p>The attributable number requires a reference temperature—it describes the additional health impacts that occur
-      when the temperature exceeds that baseline. In other words, we quantify the
-      <b>potentially avoidable emergency department visits</b> due to high summertime temperature if risk on extremely hot
-      days were reduced to the risk on an “average” hot day.</p>
-
-      <p><i>Example:</i> With 75 °F as the reference, if the daily maximum temperature is 100 °F
-      and we estimate 1,000 additional ED visits, the interpretation is: 
-      “Compared to days with a daily maximum temperature of 75 °F, there were 1,000 additional emergency department visits
-      on days with a daily maximum temperature of 100 °F.”</p>
-  
-      <p>If the reference temperature is changed (e.g., to 80 °F or 70 °F), the estimate of the attributable number will also change.</p>
-      ")
+             HTML(html2),
+             h2("Estimation of Attributable Number"),
+             HTML(html3)
              
     ),
     # BY TOWN
     tabPanel(title = "Town",
              titlePanel("Heat-attributable ED visits by MA Town"),
-        sidebarLayout(
-          sidebarPanel(
-            selectInput("city_metric", "Metric", choices = names(metric_map)),
-            sliderInput("city_pop_range", "Town population range (2020)",
-                        min = min(by_city_df$POP2020), max = max(by_city_df$POP2020),
-                        value = range(by_city_df$POP2020), step = 1, sep = ","),
-            numericInput("city_top_n", "Show top N towns", 
-                         value = 15, min = 5, max = 100)
-          ),
-          mainPanel(
-            plotOutput("by_city_barplot", height = "450px"),
-            tags$hr(),
-            h4("by_city_filtered data"),
-            tableOutput("by_city_table")
-          )
-        )
+             sidebarLayout(
+              sidebarPanel(
+                # City metric
+                selectInput("city_metric", "Metric", 
+                            choices = names(metric_map)),
+                # pop range
+                sliderInput("city_pop_range", 
+                            "Town population range (2020)",
+                            min = min(by_city_df$POP2020), 
+                            max = max(by_city_df$POP2020),
+                            value = range(by_city_df$POP2020), 
+                            step = 1, sep = ","),
+                # show top N
+                numericInput("city_top_n", "Show top N towns", 
+                             value = 15, min = 5, max = 100)
+              ),
+              mainPanel(
+                plotOutput("by_city_barplot", height = "450px"),
+                tags$hr(),
+                h4("by_city_filtered data"),
+                tableOutput("by_city_table")
+              )
+             )
     ),
     # BY DEMOGRAPHICS
     tabPanel(title = "Demographics",
@@ -156,7 +98,7 @@ ui <- fluidPage(
                  selectInput("demo_metric", "Metric", 
                              choices = names(metric_map)),
                  selectInput("demo_variable", "Variable", 
-                             choices = names(demographic_variable_map)),
+                             choices = names(county_map)),
                  uiOutput("demo_level_ui")
 
                ),
@@ -170,9 +112,14 @@ ui <- fluidPage(
              
              
              ),
+    # BY Timing 
+    tabPanel(title = "Timing",
+             titlePanel("Heat-attributable ED visits by Timing")
+    ),
     # BY GEOSPATIAL 
     tabPanel(title = "GeoSpatial",
-             titlePanel("Heat-attributable ED visits by Geospatial variables")),
+             titlePanel("Heat-attributable ED visits by Geospatial variables")
+             ),
   )
 )
 
@@ -236,12 +183,13 @@ server <- function(input, output, session) {
   # Render the second selectInput based on the chosen category
   output$demo_level_ui <- renderUI({
 
-    opts <- demographic_variable_map[[ input$demo_variable  ]]
+    opts <- county_map[[ input$demo_variable  ]]
 
     selectInput(
       inputId = "demo_level",
       label   = "Level:",
       choices = opts,
+      multiple = T
     )
   })
   
@@ -250,7 +198,7 @@ server <- function(input, output, session) {
     print(input$demo_level)
     print('--')
     if(!is.null(input$demo_level)) {
-      by_demo_df[by_demo_df$AREA == input$demo_level, ]
+      by_demo_df[by_demo_df$AREA %in% input$demo_level, ]
     }
   })
   
@@ -273,16 +221,34 @@ server <- function(input, output, session) {
                                             '40-64', '65-79','80+'),
                                  ordered = T)
     
+    pd <- position_dodge(width = 0.75)
+    
+    # >> NOTE TO CHAD -- MAKE A LOCAL VARIABLE THAT CAN BE USED TO 
+    #                    KEEP COLORS CONSISTEN ACROSS RUNS
+    # county_names <- c(
+    #   "HAMPDEN" ,   "BRISTOL" ,   "PLYMOUTH" ,  "FRANKLIN",   "NORFOLK"  ,
+    #   "SUFFOLK",    "ESSEX"  ,    "MIDDLESEX" ,
+    #   "WORCESTER" , "BERKSHIRE" , "HAMPSHIRE" , "DUKES"    ,  "BARNSTABLE",
+    #   "NANTUCKET" 
+    # )
+    # county_colors <- viridisLite::viridis(n = length(county_names))
+    # names(county_colors) = county_names
+    
     plot_df %>%
-      ggplot(aes(x = xlevel_fct, y = vals)) +
+      ggplot(aes(x = xlevel_fct, y = vals, fill = xarea)) +
       geom_hline(yintercept = 0) +
-      geom_col(fill = "lightblue", width = 0.75, color = 'black', alpha = 0.75) +
-      geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2) +
+      geom_col(
+               position = pd,
+               width = 0.75, color = 'black', alpha = 0.75) +
+      geom_errorbar(aes(ymin = lb, ymax = ub), width = 0.2,
+                    position = pd, color = 'black', linewidth = 0.2) +
       labs(
         x = NULL,
         y = input$demo_metric,
-        title = paste("Top", nrow(d), "counties by", input$demo_metric)
+        title = input$demo_metric
       ) +
+      scale_fill_viridis_d(name = 'County') +
+      #scale_fill_manual(name = 'County', values = county_colors) +
       theme_classic2(base_size = 12) +
       theme(
         axis.line.x = element_blank(),
