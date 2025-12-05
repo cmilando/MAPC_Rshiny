@@ -28,21 +28,23 @@ town_shp_j <- st_as_sf(town_shp_j)
 ggplot(town_shp) +
   geom_sf(fill = 'grey') +
   geom_sf(data = town_shp_j,
-          aes(fill = mean_annual_attr_ED_rate_est)) +
-  scale_fill_continuous(palette = 'Reds',
-                        name = 'Mean Annual ED visit rate\n(# per 100,000)')
+          aes(fill = mean_annual_attr_ED_rate_est),
+          linewidth = 0.25) +
+  scale_fill_binned(low = 'white',
+                      high = 'darkred',
+                        name = 'Annual Heat Attributable\nED visit rate\n(# per 100,000)')
 
-dev.size()
 ggsave("img/city_rate.png", width = 8.1, height = 4.37)
 
 ggplot(town_shp) +
   geom_sf(fill = 'grey') +
   geom_sf(data = town_shp_j,
-          aes(fill = mean_annual_attr_ED_visit_est)) +
-  scale_fill_continuous(palette = 'Reds',
-                        name = 'Mean Annual ED visits\n(#)')
+          aes(fill = mean_annual_attr_ED_visit_est),
+          linewidth = 0.25) +
+  scale_fill_binned(low = 'white',
+                      high = 'darkblue',
+                      name = 'Annual Heat Attributable\nED visits\n(#)')
 
-dev.size()
 ggsave("img/city_visits.png", width = 8.1, height = 4.37)
 
 # get adjacency
